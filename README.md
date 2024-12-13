@@ -9,13 +9,13 @@ Built with https://bun.sh/.
 List available scrapers:
 
 ```sh
-bun index.ts
+bun scrape
 ```
 
 Run a scraper:
 
 ```sh
-bun index.ts <scraper>
+bun scrape <scraper>
 ```
 
 This will output a NDJSON file in the `data` directory.

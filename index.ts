@@ -10,32 +10,36 @@ const { positionals } = parseArgs({
 
 const scrapers = positionals.slice(2)
 
-const glob = new Glob('./scrapers/**/*.ts')
+const glob = new Glob('./organizations/**/*.ts')
 
 let foundScraper = false
 let availableScrapers: string[] = []
 
 for await (const file of glob.scan('.')) {
-  const match = file.match(/scrapers\/(?<id>\w+).ts/)
-  const id = match?.groups?.id
+  const match = file.match(/organizations\/(?<id>\w+).ts/)
+  const organizationId = match?.groups?.id
 
   if (scrapers.length) {
-    if (id && scrapers.includes(id)) {
+    if (organizationId && scrapers.includes(organizationId)) {
       foundScraper = true
-      console.log(`Scraping ${id}...`)
+      console.log(`Scraping ${organizationId}...`)
 
       const { default: scrape } = await import(file)
-      const stream = fs.createWriteStream(`./data/${id}.ndjson`, 'utf8')
+      const stream = fs.createWriteStream(
+        `./data/${organizationId}.ndjson`,
+        'utf8'
+      )
 
       for await (const item of await scrape()) {
-        console.log(item)
-        stream.write(`${JSON.stringify(item)}\n`)
+        const itemWithOrganizationId = { organizationId, ...item }
+        console.log(itemWithOrganizationId)
+        stream.write(`${JSON.stringify(itemWithOrganizationId)}\n`)
       }
 
       stream.end()
     }
-  } else if (id) {
-    availableScrapers.push(id)
+  } else if (organizationId) {
+    availableScrapers.push(organizationId)
   }
 }
 

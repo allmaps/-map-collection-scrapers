@@ -5,6 +5,7 @@
   "main": "index.ts",
   "type": "module",
   "scripts": {
+    "scrape": "bun index.ts",
     "merge": "cat ./data/*.ndjson | jq -s > ./data/merged.json"
   },
   "keywords": [],

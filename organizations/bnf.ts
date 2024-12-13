@@ -57,9 +57,13 @@ export default async function* scrape() {
         const match = link.match(/ark:\/(?<id>.+)/)
         const id = match?.groups?.id
 
+        if (!id) {
+          continue
+        }
+
         const title = record['srw:recordData']['oai_dc:dc']['dc:title']
         const manifestId = `https://openapi.bnf.fr/iiif/presentation/v3/ark:/${id}/manifest.json`
-        const imageId = `https://openapi.bnf.fr/iiif/image/v3/ark:/${id}/f1/info.json`
+        const imageId = `https://openapi.bnf.fr/iiif/image/v3/ark:/${id}/f1`
 
         if (title && manifestId && imageId) {
           yield {
