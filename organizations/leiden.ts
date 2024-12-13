@@ -23,7 +23,7 @@ export default async function* scrape() {
 
       await page.goto(url, { timeout: 30000 * 10 })
 
-      await page.waitForSelector('.islandora-solr-search-results')
+      await page.waitForSelector('#page')
 
       const results = await page.$$('.islandora-solr-search-result')
 
